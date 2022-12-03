@@ -1,4 +1,7 @@
+package day01
+
 import models.Elf
+import readInput
 
 fun main() {
     fun parseElves(input: List<String>): List<Elf> {
