@@ -37,7 +37,7 @@ fun main() {
         parseRucksackGroups(input).sumOf { it.getPriority() }
 
 
-    val input = readInput("Day03", packageName = "day03")
+    val input = readInput("Day03")
     val parsedInputs = parse(input)
     println(part1(parsedInputs))
     println(part2(parsedInputs))

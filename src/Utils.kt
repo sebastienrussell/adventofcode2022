@@ -5,7 +5,7 @@ import java.security.MessageDigest
 /**
  * Reads lines from the given input txt file.
  */
-fun readInput(name: String, packageName: String? = null) = File("src/${packageName ?: name.lowercase()}", "$name.txt")
+fun readInput(name: String) = File("src/", "$name.txt")
     .readLines()
 
 /**
