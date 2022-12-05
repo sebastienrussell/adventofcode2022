@@ -1,9 +1,6 @@
-package day03
-
 import models.PRIORITIES
 import models.Rucksack
 import models.RucksackGroup
-import readInput
 
 fun main() {
     fun parse(input: List<String>) = input.map { Rucksack(items = it) }

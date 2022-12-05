@@ -1,10 +1,7 @@
-package day02
-
 import models.Hand
 import models.PairOfHands
 import models.RoundOutcome
 import models.Sign
-import readInput
 
 fun main() {
     fun parseHands(input: List<String>): List<PairOfHands> =

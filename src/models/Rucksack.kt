@@ -1,7 +1,7 @@
 package models
 
-import day03.findCommonCharacter
-import day03.getPriority
+import findCommonCharacter
+import getPriority
 
 data class Rucksack(
     val items: String
