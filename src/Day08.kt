@@ -1,3 +1,5 @@
+import kotlin.math.max
+
 fun main() {
 
     fun part1(input: List<String>): Int =
@@ -56,56 +58,39 @@ fun main() {
         }
 
     fun part2(input: List<String>): Int {
-        var top: Int? = null
-        var right: Int? = null
-        var bottom: Int? = null
-        var left: Int? = null
-
-        // FirstRow
-//        for (column in input[0].indices) {
-//            val currentTreeLinked = TreeLinked(
-//                size = input[0][column] - SMALLEST_SIZE_TREE,
-//                position = Pair(0, column),
-//                left = left,
-//                right = right,
-//                top = top,
-//                bottom = bottom
-//            )
-//            when(column) {
-//                left = currentTreeLinked
-//            }
-//
-//            fieldOfTree.add(
-//                currentTreeLinked
-//            )
-//        }
+        var maxScenicScore = 0
 
         val grid = input.map { row -> row.map { it.digitToInt() } }
-        val height = grid.size
-        val width = grid.first().size
 
-        for (row in grid.indices) {
-            for (column in grid.first().indices) {
+        for (row in 1 until grid.size - 1) {
+            for (column in 1 until grid.first().size - 1) {
 
                 val currentSize = grid[row][column]
-                val topIndice = row - 1
-                val rightIndice = column + 1
-                val bottomIndice = row + 1
-                val leftIndice = column - 1
+                val currentColumnValues = grid.map { it[column] }
 
-                if (topIndice in grid.indices)
-                    top = grid[topIndice][column]
-                if (bottomIndice in grid.indices)
-                    bottom = grid[bottomIndice][column]
-                if (rightIndice in grid.first().indices)
-                    right = grid[row][rightIndice]
-                if (leftIndice in grid.first().indices)
-                    left = grid[row][leftIndice]
-                
+                var leftScenicScore = grid[row].take(column).reversed().takeWhile { it < currentSize }.count()
+                if (leftScenicScore == 0 || leftScenicScore < grid[row].take(column).size)
+                    leftScenicScore++
+
+                var rightScenicScore = grid[row].drop(column + 1).takeWhile { it < currentSize }.count()
+                if (rightScenicScore == 0 || rightScenicScore < grid[row].drop(column + 1).size)
+                    rightScenicScore++
+
+                var topScenicScore = currentColumnValues.take(row).reversed().takeWhile { it < currentSize }.count()
+                if (topScenicScore == 0 || topScenicScore < currentColumnValues.take(row).size)
+                    topScenicScore++
+
+                var bottomScenicScore = currentColumnValues.drop(row + 1).takeWhile { it < currentSize }.count()
+
+                if (bottomScenicScore == 0 || bottomScenicScore < currentColumnValues.drop(row + 1).size)
+                    bottomScenicScore++
+
+                val treeScenicScore = leftScenicScore * rightScenicScore * topScenicScore * bottomScenicScore
+                maxScenicScore = max(treeScenicScore, maxScenicScore)
             }
         }
 
-        return 0
+        return maxScenicScore
     }
 
     val testInput = readInput("Day08_test")
@@ -114,21 +99,12 @@ fun main() {
 
     val input = readInput("Day08")
     println(part1(input))
-//    println(part2(input))
+    println(part2(input))
 }
 
 data class Tree(
     val size: Int,
     val position: Pair<Int, Int>
-)
-
-data class TreeLinked(
-    val size: Int,
-    val position: Pair<Int, Int>,
-    val left: TreeLinked?,
-    val right: TreeLinked?,
-    val top: TreeLinked?,
-    val bottom: TreeLinked?
 )
 
 const val SMALLEST_SIZE_TREE = '0'
