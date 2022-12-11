@@ -18,10 +18,10 @@ fun main() {
                 val oldHeadPos = headPos
 
                 headPos = when (direction) {
-                    'R' -> Pair(headPos.first, headPos.second + 1) // RIGHT
-                    'L' -> Pair(headPos.first, headPos.second - 1) // LEFT
-                    'D' -> Pair(headPos.first - 1, headPos.second) // DOWN
-                    else -> Pair(headPos.first + 1, headPos.second) // UP
+                    'R' -> Point(headPos.x, headPos.y + 1) // RIGHT
+                    'L' -> Point(headPos.x, headPos.y - 1) // LEFT
+                    'D' -> Point(headPos.x - 1, headPos.y) // DOWN
+                    else -> Point(headPos.x + 1, headPos.y) // UP
                 }
 
                 tailPos = when {
@@ -61,23 +61,24 @@ data class Point(
         this.x = x
         this.y = y
     }
+
+    fun isPointDiagonal(secondPoint: Point): Boolean {
+        val isDiagonalBottomLeft = x - 1 == secondPoint.x && y - 1 == secondPoint.y // -1/-1
+        val isDiagonalBottomRight = x - 1 == secondPoint.x && y + 1 == secondPoint.y // -1/+1
+        val isDiagonalTopRight = x + 1 == secondPoint.x && y + 1 == secondPoint.y // +1/+1
+        val isDiagonalTopLeft = x + 1 == secondPoint.x && y - 1 == secondPoint.y // +1/-1
+
+        return isDiagonalBottomLeft || isDiagonalBottomRight || isDiagonalTopRight || isDiagonalTopLeft
+    }
+
+    fun hasDistanceOfOne(secondPoint: Point): Boolean {
+        val isLeft = x == secondPoint.x && y - 1 == secondPoint.y // 0/-1
+        val isRight = x == secondPoint.x && y + 1 == secondPoint.y // 0/+1
+        val isBottom = x - 1 == secondPoint.x && y == secondPoint.y // +1/0
+        val isTop = x + 1 == secondPoint.x && y == secondPoint.y // +1/0
+
+        return isLeft || isRight || isBottom || isTop || isPointDiagonal(secondPoint)
+    }
 }
 
-private val START_POSITION = Pair(0, 0)
-private fun Pair<Int, Int>.isPairDiagonal(secondPair: Pair<Int, Int>): Boolean {
-    val isDiagonalBottomLeft = first - 1 == secondPair.first && second - 1 == secondPair.second // -1/-1
-    val isDiagonalBottomRight = first - 1 == secondPair.first && second + 1 == secondPair.second // -1/+1
-    val isDiagonalTopRight = first + 1 == secondPair.first && second + 1 == secondPair.second // +1/+1
-    val isDiagonalTopLeft = first + 1 == secondPair.first && second - 1 == secondPair.second // +1/-1
-
-    return isDiagonalBottomLeft || isDiagonalBottomRight || isDiagonalTopRight || isDiagonalTopLeft
-}
-
-private fun Pair<Int, Int>.hasDistanceOfOne(secondPair: Pair<Int, Int>): Boolean {
-    val isLeft = first == secondPair.first && second - 1 == secondPair.second // 0/-1
-    val isRight = first == secondPair.first && second + 1 == secondPair.second // 0/+1
-    val isBottom = first - 1 == secondPair.first && second == secondPair.second // +1/0
-    val isTop = first + 1 == secondPair.first && second == secondPair.second // +1/0
-
-    return isLeft || isRight || isBottom || isTop || isPairDiagonal(secondPair)
-}
+private val START_POSITION = Point(0, 0)
